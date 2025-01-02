@@ -29,7 +29,7 @@ class DeepgramService:
             "punctuate": "true",
             "paragraphs": "true",
             "smart_format": "true",
-            "profanity_filter": "false"
+            "profanity_filter": "false",
         }
 
         async with ClientSession(connector=TCPConnector(ssl=self.ssl_context)) as session:
