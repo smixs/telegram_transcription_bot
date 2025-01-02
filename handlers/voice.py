@@ -25,8 +25,14 @@ async def handle_voice(message: Message):
         result = await deepgram_service.transcribe_audio(file_url)
         
         # Format and send
-        text, reply_markup = format_transcription(result)
-        await message.answer(text, **reply_markup)
+        parts, reply_markup = format_transcription(result)
+        
+        # Send all parts except last one
+        for part in parts[:-1]:
+            await message.answer(part)
+        
+        # Send last part with keyboard
+        await message.answer(parts[-1], reply_markup=reply_markup)
         
     except Exception as e:
         error_msg = f"Ошибка: {str(e)}"
