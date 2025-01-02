@@ -13,7 +13,7 @@ def get_style_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [
                 InlineKeyboardButton(text="✍️ Proofread", callback_data="style_proofread"),
-                InlineKeyboardButton(text="👤 My Style", callback_data="style_my"),
+                InlineKeyboardButton(text="⚡ Informal", callback_data="style_my"),
                 InlineKeyboardButton(text="👔 Business", callback_data="style_business")
             ]
         ]
