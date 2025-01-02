@@ -28,7 +28,8 @@ class DeepgramService:
             "model": "nova-2",
             "punctuate": "true",
             "paragraphs": "true",
-            "smart_format": "true"
+            "smart_format": "true",
+            "profanity_filter": "false"
         }
 
         async with ClientSession(connector=TCPConnector(ssl=self.ssl_context)) as session:
