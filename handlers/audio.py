@@ -12,8 +12,8 @@ deepgram_service = DeepgramService(config.DEEPGRAM_API_KEY)
 @router.message(F.audio)
 async def handle_audio(message: Message):
     try:
-        # Show processing status
-        processing_msg = await message.answer("Обрабатываю аудио...")
+        # Show typing action
+        await message.bot.send_chat_action(message.chat.id, "typing")
         
         # Get file
         file = await message.bot.get_file(message.audio.file_id)
@@ -26,9 +26,6 @@ async def handle_audio(message: Message):
         
         # Format and send
         parts, reply_markup = format_transcription(result)
-        
-        # Delete processing message
-        await processing_msg.delete()
         
         # Send all parts except last one
         for part in parts[:-1]:
