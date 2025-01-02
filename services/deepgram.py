@@ -1,61 +1,53 @@
-from deepgram import (
-    DeepgramClient,
-    PrerecordedOptions,
-    FileSource
-)
+from aiohttp import ClientSession, TCPConnector
 from models.transcription import TranscriptionResult, Word
-import aiohttp
+import ssl
+import certifi
+import json
 
 class DeepgramService:
     def __init__(self, api_key: str):
-        self.client = DeepgramClient(api_key)
+        self.api_key = api_key
+        self.base_url = "https://api.deepgram.com/v1/listen"
+        self.ssl_context = ssl.create_default_context(cafile=certifi.where())
 
     async def download_file(self, url: str) -> bytes:
-        async with aiohttp.ClientSession() as session:
+        async with ClientSession(connector=TCPConnector(ssl=self.ssl_context)) as session:
             async with session.get(url) as response:
                 return await response.read()
 
     async def transcribe_audio(self, file_url: str) -> TranscriptionResult:
         audio_data = await self.download_file(file_url)
         
-        # Расширенные опции транскрипции
-        options = PrerecordedOptions(
-            smart_format=True,  # Умное форматирование чисел, дат, телефонов
-            punctuate=True,     # Автоматическая пунктуация
-            paragraphs=True,    # Разделение на параграфы
-            language="ru",      # Русский язык
-            model="nova-2"      # Самая точная модель
-        )
-
-        # Создаем payload для транскрипции
-        payload = {
-            "buffer": audio_data,
-            "mimetype": "audio/ogg"
+        headers = {
+            "Authorization": f"Token {self.api_key}",
+            "Content-Type": "application/octet-stream"
         }
         
-        # Отправляем запрос
-        response = self.client.listen.rest.v("1").transcribe_file(
-            payload,
-            options
-        )
+        params = {
+            "language": "ru",
+            "model": "nova-2",
+            "punctuate": "true",
+            "paragraphs": "true",
+            "smart_format": "true"
+        }
 
-        # Получаем результаты
-        result = response.results.channels[0].alternatives[0]
-        
-        # Конвертируем слова в наш формат
-        words = [
-            Word(
-                word=w.word,
-                start=w.start,
-                end=w.end,
-                confidence=w.confidence
-            )
-            for w in result.words
-        ]
-
-        return TranscriptionResult(
-            text=result.transcript,
-            confidence=result.confidence,
-            words=words,
-            language="ru"
-        )
+        async with ClientSession(connector=TCPConnector(ssl=self.ssl_context)) as session:
+            async with session.post(self.base_url, headers=headers, params=params, data=audio_data) as response:
+                result = await response.json()
+                alternative = result["results"]["channels"][0]["alternatives"][0]
+                
+                # Преобразуем слова из Deepgram в наш формат
+                words = []
+                for word_data in alternative.get("words", []):
+                    words.append(Word(
+                        word=word_data["word"],
+                        start=word_data["start"],
+                        end=word_data["end"],
+                        confidence=word_data["confidence"]
+                    ))
+                
+                return TranscriptionResult(
+                    text=alternative["transcript"],
+                    confidence=alternative["confidence"],
+                    words=words
+                )

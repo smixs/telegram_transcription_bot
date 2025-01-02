@@ -8,13 +8,13 @@ router = Router()
 anthropic_service = AnthropicService(config.ANTHROPIC_API_KEY)
 
 def get_style_keyboard() -> InlineKeyboardMarkup:
-    """Create inline keyboard with style buttons."""
+    """Create keyboard with style buttons."""
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton(text="✍️ Proofread", callback_data="style_proofread"),
-                InlineKeyboardButton(text="👤 My Style", callback_data="style_my_style"),
-                InlineKeyboardButton(text="💼 Business", callback_data="style_business")
+                InlineKeyboardButton(text="👤 My Style", callback_data="style_my"),
+                InlineKeyboardButton(text="👔 Business", callback_data="style_business")
             ]
         ]
     )
