@@ -19,12 +19,16 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # Virtual Environment
 venv/
 ENV/
 env/
 .env
+.venv
+env.bak/
+venv.bak/
 
 # IDE
 .idea/
@@ -32,19 +36,67 @@ env/
 *.swp
 *.swo
 .DS_Store
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+.classpath
 
 # Logs
 logs/
 *.log
 bot.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Docker
 .docker/
 docker-compose.override.yml
+*.env.docker
+
+# Testing
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+htmlcov/
+.tox/
+nosetests.xml
+coverage/
+
+# Linting and Type Checking
+.mypy_cache/
+.ruff_cache/
+.pylint.d/
+.pyre/
+.pytype/
+
+# Documentation
+docs/_build/
+site/
+
+# Temporary files
+*.bak
+*.tmp
+*.temp
+.*.swp
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Project specific
-.coverage
-htmlcov/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/ 
+config/local.py
+instance/
+.webassets-cache/
+celerybeat-schedule
+celerybeat.pid 
