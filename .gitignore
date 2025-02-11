@@ -99,4 +99,7 @@ config/local.py
 instance/
 .webassets-cache/
 celerybeat-schedule
-celerybeat.pid 
+celerybeat.pid
+
+# Cursor specific
+.cursorrules 
