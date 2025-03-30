@@ -15,6 +15,9 @@ def get_style_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(text="✍️ Proofread", callback_data="style_proofread"),
                 InlineKeyboardButton(text="⚡ Informal", callback_data="style_my"),
                 InlineKeyboardButton(text="👔 Business", callback_data="style_business")
+            ],
+            [
+                InlineKeyboardButton(text="📋 Brief", callback_data="style_brief")
             ]
         ]
     )
