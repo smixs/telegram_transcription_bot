@@ -102,4 +102,4 @@ celerybeat-schedule
 celerybeat.pid
 
 # Cursor specific
-.cursorrules 
+.cursorrules .specstory/
